@@ -166,7 +166,7 @@ public class Model extends Observable {
             int matchRow = row;
             for (int r = row+1; r < 4; r++) {
                 if (board.tile(col,r)!=null) {
-                    if (board.tile(col, r).value()>tile.value()){
+                    if (board.tile(col, r).value()!=tile.value()){
                         break;
                     }
                     else if (board.tile(col, r).value() == tile.value()) {
