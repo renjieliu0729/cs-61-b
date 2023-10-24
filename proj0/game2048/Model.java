@@ -120,9 +120,11 @@ public class Model extends Observable {
             board.setViewingPerspective(Side.NORTH);
         } else if (side == Side.EAST){
             board.setViewingPerspective(Side.EAST);
+            goThroughBoard(board);
             board.setViewingPerspective(Side.NORTH);
         } else {
             board.setViewingPerspective(Side.WEST);
+            goThroughBoard(board);
             board.setViewingPerspective(Side.NORTH);
         }
 
