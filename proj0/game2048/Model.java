@@ -112,8 +112,18 @@ public class Model extends Observable {
         // TODO: Modify this.board (and perhaps this.score) to account
         // for the tilt to the Side SIDE. If the board changed, set the
         // changed local variable to true.
-        for (int c=0;c<board.size();c++){
-            columnMove(board,c);
+        if (side == Side.NORTH) {
+            goThroughBoard(board);
+        }  else if (side == Side.SOUTH){
+            board.setViewingPerspective(Side.SOUTH);
+            goThroughBoard(board);
+            board.setViewingPerspective(Side.NORTH);
+        } else if (side == Side.EAST){
+            board.setViewingPerspective(Side.EAST);
+            board.setViewingPerspective(Side.NORTH);
+        } else {
+            board.setViewingPerspective(Side.WEST);
+            board.setViewingPerspective(Side.NORTH);
         }
 
         changed = true;
@@ -122,6 +132,12 @@ public class Model extends Observable {
             setChanged();
         }
         return changed;
+    }
+
+    public void goThroughBoard(Board b){
+        for (int c = 0; c < board.size(); c++) {
+            columnMove(board, c);
+        }
     }
 
 //    get the highest empty tile row index above and including the current tile
