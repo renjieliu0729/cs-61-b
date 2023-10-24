@@ -107,39 +107,47 @@ public class Model extends Observable {
      *    and the trailing tile does not.
      * */
     public boolean tilt(Side side) {
-        boolean changed = true;
+        boolean changed = false;
 
         // TODO: Modify this.board (and perhaps this.score) to account
         // for the tilt to the Side SIDE. If the board changed, set the
         // changed local variable to true.
         if (side == Side.NORTH) {
-            changed = goThroughBoard(board);
+            if (board.tile(3,3)!=null){
+                System.out.println("value" + board.tile(3,3).value());
+            }
         }  else if (side == Side.SOUTH){
             board.setViewingPerspective(Side.SOUTH);
-            changed = goThroughBoard(board);
-            board.setViewingPerspective(Side.NORTH);
+            if (board.tile(3,3)!=null){
+                System.out.println("value" + board.tile(3,3).value());
+            }
         } else if (side == Side.EAST){
             board.setViewingPerspective(Side.EAST);
-            changed = goThroughBoard(board);
-            board.setViewingPerspective(Side.NORTH);
+            if (board.tile(3,0)!=null){
+                System.out.println("value" + board.tile(3,0).value());
+            }
         } else {
+            if (board.tile(3,3)!=null){
+                System.out.println("value" +board.tile(3,3).value());
+            }
             board.setViewingPerspective(Side.WEST);
-            changed = goThroughBoard(board);
-            board.setViewingPerspective(Side.NORTH);
         }
 
         changed = true;
+        goThroughBoard(board);
+
         checkGameOver();
         if (changed) {
             setChanged();
         }
+        board.setViewingPerspective(Side.NORTH);
         return changed;
     }
 
     public boolean goThroughBoard(Board b){
         boolean tracker = false;
-        for (int c = 0; c < board.size(); c++) {
-            tracker = columnMove(board, c);
+        for (int c = 3; c >=0; c--) {
+            tracker |= columnMove(board, c);
         }
         return tracker;
     }
@@ -149,8 +157,11 @@ public class Model extends Observable {
             int row = tile.row();
             int col = tile.col();
             int clearedRow = row;
-            for (int r = row; r < 4; r++) {
-                if (board.tile(col, r) == null) {
+            for (int r = row+1; r < 4; r++) {
+                if (board.tile(col, r) != null){
+                    break;
+                }
+                else {
                     clearedRow = r;
                     System.out.println("tile Clear Row"+tile.col()+" "+tile.row()+" "+r);
                 }
