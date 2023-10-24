@@ -107,24 +107,24 @@ public class Model extends Observable {
      *    and the trailing tile does not.
      * */
     public boolean tilt(Side side) {
-        boolean changed = false;
+        boolean changed = true;
 
         // TODO: Modify this.board (and perhaps this.score) to account
         // for the tilt to the Side SIDE. If the board changed, set the
         // changed local variable to true.
         if (side == Side.NORTH) {
-            goThroughBoard(board);
+            changed = goThroughBoard(board);
         }  else if (side == Side.SOUTH){
             board.setViewingPerspective(Side.SOUTH);
-            goThroughBoard(board);
+            changed = goThroughBoard(board);
             board.setViewingPerspective(Side.NORTH);
         } else if (side == Side.EAST){
             board.setViewingPerspective(Side.EAST);
-            goThroughBoard(board);
+            changed = goThroughBoard(board);
             board.setViewingPerspective(Side.NORTH);
         } else {
             board.setViewingPerspective(Side.WEST);
-            goThroughBoard(board);
+            changed = goThroughBoard(board);
             board.setViewingPerspective(Side.NORTH);
         }
 
@@ -136,10 +136,12 @@ public class Model extends Observable {
         return changed;
     }
 
-    public void goThroughBoard(Board b){
+    public boolean goThroughBoard(Board b){
+        boolean tracker = false;
         for (int c = 0; c < board.size(); c++) {
-            columnMove(board, c);
+            tracker = columnMove(board, c);
         }
+        return tracker;
     }
 
 //    get the highest empty tile row index above and including the current tile
@@ -150,23 +152,27 @@ public class Model extends Observable {
             for (int r = row; r < 4; r++) {
                 if (board.tile(col, r) == null) {
                     clearedRow = r;
-                    System.out.println("tile "+tile.col()+" "+r);
+                    System.out.println("tile Clear Row"+tile.col()+" "+tile.row()+" "+r);
                 }
             }
             return clearedRow;
     }
 
 
-
+//get the lowest matched row number starting with tile's row
     public int aboveMatchRow(Tile tile) {
             int row = tile.row();
             int col = tile.col();
             int matchRow = row;
-            for (int r = row; r < 4; r++) {
+            for (int r = row+1; r < 4; r++) {
                 if (board.tile(col,r)!=null) {
-                    if (board.tile(col, r).value() == tile.value()) {
+                    if (board.tile(col, r).value()>tile.value()){
+                        break;
+                    }
+                    else if (board.tile(col, r).value() == tile.value()) {
                         matchRow = r;
-                        System.out.println("tile " + tile.col() + " " + tile.row() + " " + matchRow);
+                        System.out.println("tile Math Row " + tile.col() + " " + tile.row() + " " + matchRow);
+                        break;
                     }
                 }
             }
